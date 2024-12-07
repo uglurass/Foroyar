@@ -1,0 +1,66 @@
+Normal control flow Normal code level
+Abnormal control flow. For example, an application calls a system call, causing the execution environment to switch. This mutation is called abnormal control flow.
+
+
+Normal and exception control flow from a hardware perspective
+The physical resource content of the control flow when it completes the execution of an instruction,
+That is, the physical resource content that ensures that the control flow instructions can continue to be executed correctly at the next moment is called the context of the control flow, which can also be called the state of the execution environment where the control flow is located.
+If a control flow belongs to a function, then the context of this control flow is simply called the function call context.
+If a control flow belongs to an application, the context of the control flow is simply called the application context.
+If a process is regarded as a running application, then the control flow belonging to an application can be referred to as a process context.
+
+If a control flow belongs to the operating system, then the context of this control flow is simply called the operating system context.
+If a control flow belongs to the code in the operating system that handles interrupts/exceptions/traps, then the context of this control flow is simply called the interrupt/exception/trap context.
+The context saving and restoration of exception control flow is mainly completed through the cooperation of the CPU and the operating system (manually writing instructions to save and restore registers on the stack);
+The context saving and restoration of function transfer control flow is mainly accomplished through the help of the compiler (which automatically generates instructions to save and restore registers on the stack). For example, when compiling
+Operating system three types of exception control flow
+Peripheral interrupts, such as clock interrupts, console interrupts, etc., are generated asynchronously. The CPU receives the interrupt signal and considers whether to process it.
+Exception Exception (Exception) is the detection of abnormal or illegal internal events (such as division-by-zero error, address access out of bounds) during the execution of instructions by the processor. After an exception occurs, the operating system needs to handle the exception.
+     This will destroy the control flow context of the application before the interruption, so the operating system must save and restore the control flow context of the application before the interruption.
+
+A trap is an intentional event caused by a program using a system call that requests an operating system service. After a trap occurs, the operating system needs to execute a system call service to respond to the system call request.
+         This will destroy the control flow context of the application before the trap, so the operating system must save and restore the control flow context of the application before the trap.
+
+Address Space is a virtualization and abstraction of physical memory, also called Virtual Memory. It is the operating system providing a large (which may exceed the physical memory capacity of the computer) to applications and users through the support of the Memory Management Unit (MMU) hardware in the processor.
+Contiguous (continuous address space addressing), private (other applications cannot destroy) storage space.
+This requires the operating system to combine memory and external memory (i.e. persistent storage, the hard disk is a typical external memory) to manage, provide users with a virtual memory with a capacity much larger than the actual memory, and requires the operating system to allocate memory space,
+This allows users to isolate programs and data stored in memory from each other and prevent them from interfering with each other. The virtual memory management in the operating system is closely related to the MMU of the processor. After the virtual memory mechanism is started,
+Each virtual address that software accesses through the CPU needs to be converted into a physical address for access by the MMU in the CPU.
+
+
+
+File is mainly used to abstract persistent storage and is further extended to abstract peripherals.
+Specifically, files can be understood as data stored on persistent storage media (such as hard drives, optical disks, USB flash drives, etc.) that are convenient for applications and users to read and write.
+The data access unit of persistent storage media represented by disk is a sector or a block, while the data access unit in memory is a byte or a word.
+This requires the operating system to shield the difference between disk and memory through files, and try to process persistently stored data in memory reading and writing. When the processor needs to access data in the file,
+They can be loaded into memory through the operating system. The task of file management is to effectively support operations such as storage, retrieval, and modification of files.
+From a higher and broader level, various peripherals, although very different, also have basic read and write operations, which can be abstracted uniformly through files.
+And the specific access process to peripherals is hidden in the internal implementation of the operating system, so that users can access various peripherals with unified file operations.
+In this way, the file can be regarded as a unified abstraction of the peripheral device, and the application program completes access to the peripheral device through basic read and write operations.
+operating system characteristics
+
+virtualization
+    Memory virtualization Because the available physical addresses change dynamically, the compiler and linker fix a virtual address (through the MMU) but the dynamic mapping of virtual addresses and physical addresses is maintained by the operating system
+    In this way, constants, function symbols, etc. can be positioned during compilation.
+    MMU: memory management unit hardware module cpu manages access to hardware through this unit
+MMU: memory management unit hardware module cpu manages access to hardware through this unit
+    Not only the virtualization of memory addresses, but also the virtualization of size. For example, when it is not enough, you can release the less frequently used memory (the data can be persisted to the hard disk).
+
+
+    CPU virtualization is mainly a time-sharing system
+Concurrency similar to cpu virtualization time slice roulette
+
+Asynchronous system calls and interrupts interrupt the currently executing sequence of instructions.
+Sharing is still related to virtualization. Shared resources are of course limited. Reading is no problem. Writing or reading and writing are still mutually exclusive. The actual reading should also be arranged through time sharing?
+Persistence, such as persistence of memory data to hard disk
+
+
+Debian 11 root password reset.
+
+
+Restart the grub menu and press e to enter the editing interface. Append rw init=/bin/bash at the end of the linux line and then start with f10.
+
+mount | grep -w /
+Check the file system permissions. If yes, change the password directly with passwd. At this time, the root user is logged in.
+
+Then exec /sbin/init can restart the system.
